@@ -1,4 +1,4 @@
-// OFAC â€” US Treasury Office of Foreign Assets Control Sanctions
+// OFAC â€?US Treasury Office of Foreign Assets Control Sanctions
 // No auth required. Monitors the Specially Designated Nationals (SDN) list
 // and consolidated sanctions list for changes.
 
@@ -99,7 +99,7 @@ function parseRecentEntries(xml) {
   return entries;
 }
 
-// Briefing â€” report on sanctions list status and metadata
+// Briefing â€?report on sanctions list status and metadata
 export async function briefing() {
   const [sdnMeta, advancedMeta] = await Promise.all([
     getSDNMetadata(),

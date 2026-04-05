@@ -1,4 +1,4 @@
-// USPTO PatentsView â€” Patent Intelligence
+// USPTO PatentsView â€?Patent Intelligence
 // No auth required. Tracks patent filings in strategic technology areas.
 // API v1: https://search.patentsview.org/api/v1/patent/
 // Useful for detecting R&D trends, tech competition, state-backed innovation.
@@ -130,7 +130,7 @@ async function searchDomain(domain, since) {
   return patents.map(compactPatent);
 }
 
-// Briefing â€” search recent patents in key strategic tech areas
+// Briefing â€?search recent patents in key strategic tech areas
 export async function briefing() {
   const since = daysAgo(90);
   const domainEntries = Object.entries(STRATEGIC_DOMAINS);

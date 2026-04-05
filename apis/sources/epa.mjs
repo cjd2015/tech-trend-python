@@ -1,4 +1,4 @@
-// EPA RadNet â€” Radiation Monitoring Network
+// EPA RadNet â€?Radiation Monitoring Network
 // No auth required. Government open data via Envirofacts REST API.
 // Monitors ambient radiation levels across the US via fixed monitoring stations.
 // Complements Safecast (citizen science) with official government readings.
@@ -123,7 +123,7 @@ function checkReading(reading) {
   return null;
 }
 
-// Briefing â€” get recent radiation readings from EPA network, flag anomalies
+// Briefing â€?get recent radiation readings from EPA network, flag anomalies
 export async function briefing() {
   const readings = [];
   const signals = [];

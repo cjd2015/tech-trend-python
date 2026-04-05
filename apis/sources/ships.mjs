@@ -1,4 +1,4 @@
-// Ship/Vessel Tracking â€” aisstream.io (free real-time global AIS)
+// Ship/Vessel Tracking â€?aisstream.io (free real-time global AIS)
 // Also includes fallback to public vessel tracking data
 // Detects: dark ships, sanctions evasion, naval deployments, port congestion
 
@@ -32,7 +32,7 @@ export async function briefing() {
     timestamp: new Date().toISOString(),
     status: hasKey ? 'ready' : 'limited',
     message: hasKey
-      ? 'AIS stream connected â€” use WebSocket listener for real-time data'
+      ? 'AIS stream connected â€?use WebSocket listener for real-time data'
       : 'Set AISSTREAM_API_KEY for real-time global vessel tracking (free at aisstream.io)',
     chokepoints: CHOKEPOINTS,
     monitoringCapabilities: [

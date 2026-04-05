@@ -1,4 +1,4 @@
-// Safecast â€” Global radiation monitoring (150M+ readings)
+// Safecast â€?Global radiation monitoring (150M+ readings)
 // No auth required. CC0 public domain. Citizen-science network.
 
 import { safeFetch } from '../utils/fetch.mjs';
@@ -36,7 +36,7 @@ const NUCLEAR_SITES = {
   dimona: { lat: 31.0, lon: 35.15, label: 'Dimona (Israel)', radius: 100 },
 };
 
-// Briefing â€” check radiation levels near key nuclear sites
+// Briefing â€?check radiation levels near key nuclear sites
 export async function briefing() {
   const results = await Promise.all(
     Object.entries(NUCLEAR_SITES).map(async ([key, site]) => {

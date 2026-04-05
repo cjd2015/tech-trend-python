@@ -1,4 +1,4 @@
-// ReliefWeb â€” UN OCHA humanitarian crisis tracking
+// ReliefWeb â€?UN OCHA humanitarian crisis tracking
 // Requires approved appname since Nov 2025. Register at https://apidoc.reliefweb.int/parameters#appname
 // Falls back to HDX (Humanitarian Data Exchange) if ReliefWeb API returns 403.
 
@@ -7,7 +7,7 @@ import { safeFetch } from '../utils/fetch.mjs';
 const BASE = 'https://api.reliefweb.int/v1';
 // Register your own appname at https://apidoc.reliefweb.int/parameters#appname
 // and replace this value. Without an approved appname the API returns 403.
-const APPNAME = process.env.RELIEFWEB_APPNAME || 'crucix';
+const APPNAME = process.env.RELIEFWEB_APPNAME || 'TechTrend';
 
 const HDX_BASE = 'https://data.humdata.org/api/3/action';
 
@@ -21,7 +21,7 @@ async function rwPost(endpoint, body) {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'User-Agent': 'Crucix/1.0',
+        'User-Agent': 'TechTrend/1.0',
       },
       body: JSON.stringify(body),
       signal: controller.signal,
@@ -94,7 +94,7 @@ async function hdxFallback(limit = 15) {
   return [];
 }
 
-// Briefing â€” get latest humanitarian crises
+// Briefing â€?get latest humanitarian crises
 export async function briefing() {
   const [reports, disasters] = await Promise.all([
     searchReports({ limit: 15 }),
@@ -131,7 +131,7 @@ export async function briefing() {
   }
 
   return {
-    source: rwFailed ? 'HDX (Humanitarian Data Exchange) â€” ReliefWeb fallback' : 'ReliefWeb (UN OCHA)',
+    source: rwFailed ? 'HDX (Humanitarian Data Exchange) â€?ReliefWeb fallback' : 'ReliefWeb (UN OCHA)',
     timestamp: new Date().toISOString(),
     ...(rwFailed
       ? {

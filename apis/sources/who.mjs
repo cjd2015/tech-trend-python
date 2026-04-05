@@ -1,4 +1,4 @@
-// WHO â€” World Health Organization Global Health Observatory
+// WHO â€?World Health Organization Global Health Observatory
 // No auth required. Disease outbreak monitoring.
 
 import { safeFetch } from '../utils/fetch.mjs';
@@ -32,7 +32,7 @@ export async function getOutbreakNews() {
     const timer = setTimeout(() => controller.abort(), 15000);
     const res = await fetch(DON_API, {
       signal: controller.signal,
-      headers: { 'User-Agent': 'Crucix/1.0' },
+      headers: { 'User-Agent': 'TechTrend/1.0' },
     });
     clearTimeout(timer);
 

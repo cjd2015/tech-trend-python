@@ -1,11 +1,11 @@
-// USAspending â€” Federal spending, defense contracts, procurement signals
+// USAspending â€?Federal spending, defense contracts, procurement signals
 // No auth required. Updated daily.
 
 import { safeFetch, daysAgo } from '../utils/fetch.mjs';
 
 const BASE = 'https://api.usaspending.gov/api/v2';
 
-// Award type codes â€” required by the spending_by_award endpoint
+// Award type codes â€?required by the spending_by_award endpoint
 // Contracts: A=BPA Call, B=Purchase Order, C=Delivery Order, D=Definitive Contract
 // Grants: 02=Block Grant, 03=Formula Grant, 04=Project Grant, 05=Cooperative Agreement
 // Direct payments: 06=Direct Payment (unrestricted), 07=Direct Payment (specified use)

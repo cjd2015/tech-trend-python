@@ -1,7 +1,7 @@
-// ACLED â€” Armed Conflict Location & Event Data
+// ACLED â€?Armed Conflict Location & Event Data
 // Auth strategy (tries in order):
-//   1. Cookie-based session: POST /user/login?_format=json â†’ session cookie
-//   2. OAuth Bearer token:   POST /oauth/token â†’ Authorization header
+//   1. Cookie-based session: POST /user/login?_format=json â†?session cookie
+//   2. OAuth Bearer token:   POST /oauth/token â†?Authorization header
 // Set ACLED_EMAIL and ACLED_PASSWORD in .env (your myACLED login credentials).
 // Data endpoint: GET https://acleddata.com/api/acled/read
 
@@ -37,7 +37,7 @@ async function loginCookie(email, password) {
       return { cookies: cookieStr };
     }
 
-    // Some Drupal sites return 303 redirect on successful login â€” cookies still set
+    // Some Drupal sites return 303 redirect on successful login â€?cookies still set
     if (res.status >= 300 && res.status < 400 && cookieStr) {
       return { cookies: cookieStr };
     }
@@ -46,7 +46,7 @@ async function loginCookie(email, password) {
     return { error: `Cookie login failed (HTTP ${res.status}): ${errText.slice(0, 200)}` };
   } catch (e) {
     clearTimeout(timer);
-    const cause = e.cause ? ` â†’ ${e.cause.message || e.cause.code || e.cause}` : '';
+    const cause = e.cause ? ` â†?${e.cause.message || e.cause.code || e.cause}` : '';
     return { error: `Cookie login error: ${e.message}${cause}` };
   }
 }
@@ -84,7 +84,7 @@ async function loginOAuth(email, password) {
     return { token: data.access_token };
   } catch (e) {
     clearTimeout(timer);
-    const cause = e.cause ? ` â†’ ${e.cause.message || e.cause.code || e.cause}` : '';
+    const cause = e.cause ? ` â†?${e.cause.message || e.cause.code || e.cause}` : '';
     return { error: `OAuth error: ${e.message}${cause}` };
   }
 }
@@ -108,7 +108,7 @@ async function authenticate() {
   // Try OAuth first (official programmatic method per ACLED docs)
   const oauthResult = await loginOAuth(email, password);
   if (oauthResult.token) {
-    if (debug) console.error(`[ACLED DEBUG] OAuth OK â€” token: ${oauthResult.token.slice(0, 20)}...`);
+    if (debug) console.error(`[ACLED DEBUG] OAuth OK â€?token: ${oauthResult.token.slice(0, 20)}...`);
     sessionCache = { cookies: null, token: oauthResult.token, method: 'oauth', expires: Date.now() + 23 * 60 * 60 * 1000 };
     return sessionCache;
   }
@@ -118,7 +118,7 @@ async function authenticate() {
   // Fall back to cookie-based session
   const cookieResult = await loginCookie(email, password);
   if (cookieResult.cookies) {
-    if (debug) console.error(`[ACLED DEBUG] Cookie OK â€” cookies: ${cookieResult.cookies.slice(0, 80)}...`);
+    if (debug) console.error(`[ACLED DEBUG] Cookie OK â€?cookies: ${cookieResult.cookies.slice(0, 80)}...`);
     sessionCache = { cookies: cookieResult.cookies, token: null, method: 'cookie', expires: Date.now() + 12 * 60 * 60 * 1000 };
     return sessionCache;
   }
@@ -129,7 +129,7 @@ async function authenticate() {
 
 // Build headers based on auth method
 function authHeaders(session) {
-  const headers = { 'User-Agent': 'Crucix/1.0', 'Content-Type': 'application/json' };
+  const headers = { 'User-Agent': 'TechTrend/1.0', 'Content-Type': 'application/json' };
   if (session.method === 'cookie' && session.cookies) {
     headers['Cookie'] = session.cookies;
   } else if (session.method === 'oauth' && session.token) {
@@ -195,8 +195,8 @@ export async function getEvents(opts = {}) {
         // Clear cache and report
         sessionCache = { cookies: null, token: null, method: null, expires: 0 };
         const hint = res.status === 403
-          ? '\nâ†’ Fix: Log in at https://acleddata.com/user/login, then:\n'
-            + '  1. Accept Terms of Use (profile â†’ Terms of Use button â†’ check the box)\n'
+          ? '\nâ†?Fix: Log in at https://acleddata.com/user/login, then:\n'
+            + '  1. Accept Terms of Use (profile â†?Terms of Use button â†?check the box)\n'
             + '  2. Complete all required profile fields\n'
             + '  3. Ensure your account has the "API" access group\n'
             + '  Contact access@acleddata.com if issues persist.'
@@ -210,7 +210,7 @@ export async function getEvents(opts = {}) {
 
     // ACLED may return a 200 with an error status in the body
     if (data?.status && data.status !== 200) {
-      return { error: `ACLED API error: status ${data.status} â€” ${data.message || 'Unknown error'}` };
+      return { error: `ACLED API error: status ${data.status} â€?${data.message || 'Unknown error'}` };
     }
 
     return data;
@@ -219,7 +219,7 @@ export async function getEvents(opts = {}) {
       return { error: 'ACLED data request timed out (25s)' };
     }
     const rootCause = e.cause ? `${e.cause.message || e.cause.code || e.cause}` : '';
-    return { error: `ACLED data error: ${e.message}${rootCause ? ' â†’ ' + rootCause : ''}` };
+    return { error: `ACLED data error: ${e.message}${rootCause ? ' â†?' + rootCause : ''}` };
   }
 }
 
@@ -235,7 +235,7 @@ function groupBy(events, field) {
   return map;
 }
 
-// Briefing â€” last 7 days of global conflict events
+// Briefing â€?last 7 days of global conflict events
 export async function briefing() {
   if (!process.env.ACLED_EMAIL || !process.env.ACLED_PASSWORD) {
     return {

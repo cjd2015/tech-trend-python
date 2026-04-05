@@ -1,4 +1,4 @@
-// ADS-B Exchange â€” Unfiltered Flight Tracking (including Military)
+// ADS-B Exchange â€?Unfiltered Flight Tracking (including Military)
 // Unlike FlightRadar24/FlightAware, ADS-B Exchange does NOT filter military aircraft.
 // Public feed access varies; RapidAPI tier available for programmatic use.
 // This module attempts the public endpoints and falls back to a documented stub.
@@ -49,7 +49,7 @@ const MILITARY_TYPES = {
   'C40':   'C-40 Clipper',
 };
 
-// Known military ICAO hex ranges (partial â€” US military allocations)
+// Known military ICAO hex ranges (partial â€?US military allocations)
 const MIL_HEX_RANGES = [
   { start: 0xADF7C8, end: 0xAFFFFF, country: 'US Military' },
   { start: 0xAE0000, end: 0xAFFFFF, country: 'US Military (alt)' },
@@ -60,7 +60,7 @@ const MIL_HEX_RANGES = [
 
 // Interesting callsign patterns that suggest military/government flights
 const MIL_CALLSIGN_PATTERNS = [
-  /^RCH/,      // US AMC (Air Mobility Command) â€” strategic airlift
+  /^RCH/,      // US AMC (Air Mobility Command) â€?strategic airlift
   /^REACH/,    // US AMC alternate
   /^DUKE/,     // Often military special ops
   /^IRON/,     // US military
@@ -205,7 +205,7 @@ export async function getAircraftInArea(lat, lon, radiusNm = 250, apiKey) {
   return data;
 }
 
-// Briefing â€” attempt to get military flight data, document what's available
+// Briefing â€?attempt to get military flight data, document what's available
 export async function briefing() {
   const apiKey = process.env.ADSB_API_KEY || process.env.RAPIDAPI_KEY || null;
   const militaryAircraft = await getMilitaryAircraft(apiKey);
@@ -268,7 +268,7 @@ export async function briefing() {
     };
   }
 
-  // No data available â€” return stub with integration documentation
+  // No data available â€?return stub with integration documentation
   return {
     source: 'ADS-B Exchange',
     timestamp: new Date().toISOString(),
@@ -277,7 +277,7 @@ export async function briefing() {
     message: apiKey
       ? 'ADS-B Exchange API returned no data. The endpoint may be temporarily unavailable.'
       : 'No ADS-B Exchange API key configured. Set ADSB_API_KEY for military flight tracking.',
-    signals: ['ADS-B data unavailable â€” cannot assess military flight activity'],
+    signals: ['ADS-B data unavailable â€?cannot assess military flight activity'],
     integrationGuide: {
       step1: 'Sign up at https://rapidapi.com/adsbexchange/api/adsbexchange-com1',
       step2: 'Subscribe to the free tier (500 requests/month)',

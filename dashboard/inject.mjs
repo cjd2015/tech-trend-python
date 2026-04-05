@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// Crucix Dashboard Data Synthesizer
+// TechTrend Dashboard Data Synthesizer
 // Reads runs/latest.json, fetches RSS news, generates signal-based ideas,
 // and injects everything into dashboard/public/jarvis.html
 //
@@ -9,7 +9,7 @@ import { existsSync, readFileSync, readdirSync, writeFileSync } from 'fs';
 import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 import { exec } from 'child_process';
-import config from '../crucix.config.mjs';
+import config from '../TechTrend.config.mjs';
 import { createLLMProvider } from '../lib/llm/index.mjs';
 import { generateLLMIdeas } from '../lib/llm/ideas.mjs';
 
@@ -130,7 +130,7 @@ function loadOpenSkyFallback(currentTimestamp) {
     const filePath = join(runsDir, file);
     try {
       const prior = JSON.parse(readFileSync(filePath, 'utf8'));
-      const priorTimestamp = prior.sources?.OpenSky?.timestamp || prior.crucix?.timestamp || null;
+      const priorTimestamp = prior.sources?.OpenSky?.timestamp || prior.TechTrend?.timestamp || null;
       if (priorTimestamp && Number.isFinite(currentMs) && new Date(priorTimestamp).getTime() >= currentMs) continue;
 
       const hotspots = prior.sources?.OpenSky?.hotspots || [];
@@ -273,7 +273,7 @@ export function generateIdeas(V2) {
   if (vix && vix.value > 20) {
     ideas.push({
       title: 'Elevated Volatility Regime',
-      text: `VIX at ${vix.value} â€” fear premium elevated. Portfolio hedges justified. Short-term equity upside is capped.`,
+      text: `VIX at ${vix.value} â€?fear premium elevated. Portfolio hedges justified. Short-term equity upside is capped.`,
       type: 'hedge', confidence: vix.value > 25 ? 'High' : 'Medium', horizon: 'tactical'
     });
   }
@@ -299,7 +299,7 @@ export function generateIdeas(V2) {
   if (spread) {
     ideas.push({
       title: spread.value > 0 ? 'Yield Curve Normalizing' : 'Yield Curve Inverted',
-      text: `10Y-2Y spread at ${spread.value.toFixed(2)}. ${spread.value > 0 ? 'Recession signal fading â€” cyclical rotation possible.' : 'Inversion persists â€” defensive positioning warranted.'}`,
+      text: `10Y-2Y spread at ${spread.value.toFixed(2)}. ${spread.value > 0 ? 'Recession signal fading â€?cyclical rotation possible.' : 'Inversion persists â€?defensive positioning warranted.'}`,
       type: 'watch', confidence: 'Medium', horizon: 'strategic'
     });
   }
@@ -373,7 +373,7 @@ export function generateIdeas(V2) {
     } else if (hyTight && vixHigh) {
       ideas.push({
         title: 'Equity Fear Exceeds Credit Stress',
-        text: `VIX at ${vix.value.toFixed(0)} but HY spread only ${hy.value.toFixed(1)}%. Equity vol may be overshooting â€” credit markets aren't confirming.`,
+        text: `VIX at ${vix.value.toFixed(0)} but HY spread only ${hy.value.toFixed(1)}%. Equity vol may be overshooting â€?credit markets aren't confirming.`,
         type: 'watch', confidence: 'Medium', horizon: 'tactical'
       });
     }
@@ -388,7 +388,7 @@ export function generateIdeas(V2) {
     if (supplyPressure && ppiRising) {
       ideas.push({
         title: 'Inflation Pipeline Building Pressure',
-        text: `GSCPI at ${V2.gscpi.value.toFixed(2)} (${V2.gscpi.interpretation}) + PPI momentum +${ppi.momChangePct?.toFixed(1)}%. Input costs flowing through â€” CPI may follow.`,
+        text: `GSCPI at ${V2.gscpi.value.toFixed(2)} (${V2.gscpi.interpretation}) + PPI momentum +${ppi.momChangePct?.toFixed(1)}%. Input costs flowing through â€?CPI may follow.`,
         type: 'long', confidence: 'Medium', horizon: 'strategic'
       });
     }
@@ -402,7 +402,7 @@ export async function synthesize(data) {
   const liveAirHotspots = data.sources.OpenSky?.hotspots || [];
   const airFallback = sumAirHotspots(liveAirHotspots) > 0
     ? null
-    : loadOpenSkyFallback(data.sources.OpenSky?.timestamp || data.crucix?.timestamp);
+    : loadOpenSkyFallback(data.sources.OpenSky?.timestamp || data.TechTrend?.timestamp);
   const effectiveAirHotspots = airFallback?.hotspots || liveAirHotspots;
   const air = summarizeAirHotspots(effectiveAirHotspots);
   const thermal = (data.sources.FIRMS?.hotspots || []).map(h => ({
@@ -464,7 +464,7 @@ export async function synthesize(data) {
     }))
   };
 
-  // EPA RadNet â€” pass through geo-tagged readings
+  // EPA RadNet â€?pass through geo-tagged readings
   const epaData = data.sources.EPA || {};
   const epaStations = [];
   const seenEpa = new Set();
@@ -597,11 +597,11 @@ export async function synthesize(data) {
   const news = await fetchAllNews();
 
   const V2 = {
-    meta: data.crucix, air, thermal, tSignals, chokepoints, nuke, nukeSignals,
+    meta: data.TechTrend, air, thermal, tSignals, chokepoints, nuke, nukeSignals,
     airMeta: {
       fallback: Boolean(airFallback),
       liveTotal: sumAirHotspots(liveAirHotspots),
-      timestamp: airFallback?.timestamp || data.sources.OpenSky?.timestamp || data.crucix?.timestamp || null,
+      timestamp: airFallback?.timestamp || data.sources.OpenSky?.timestamp || data.TechTrend?.timestamp || null,
       source: airFallback ? 'OpenSky fallback' : 'OpenSky',
       ...(airFallback ? { fallbackFile: airFallback.file } : {}),
       ...(data.sources.OpenSky?.error ? { error: data.sources.OpenSky.error } : {}),

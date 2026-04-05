@@ -1,4 +1,4 @@
-// OpenSky Network â€” Real-time flight tracking
+// OpenSky Network â€?Real-time flight tracking
 // Free for research. 4,000 API credits/day (no auth), 8,000 with account.
 // Tracks all aircraft with ADS-B transponders including many military.
 
@@ -63,7 +63,7 @@ const HOTSPOTS = {
   hornOfAfrica: { lamin: 5, lomin: 40, lamax: 15, lomax: 55, label: 'Horn of Africa' },
 };
 
-// Briefing â€” check hotspot regions for flight activity
+// Briefing â€?check hotspot regions for flight activity
 export async function briefing() {
   const hotspotEntries = Object.entries(HOTSPOTS);
   const results = await Promise.all(

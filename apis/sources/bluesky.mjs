@@ -1,4 +1,4 @@
-// Bluesky â€” AT Protocol social intelligence
+// Bluesky â€?AT Protocol social intelligence
 // No auth required for public search. Real-time social sentiment on geopolitical/market topics.
 // Public API: app.bsky.feed.searchPosts (full-text search, sorted by latest)
 
@@ -39,7 +39,7 @@ function categorize(posts, keywords) {
   );
 }
 
-// Briefing â€” search key geopolitical/market terms and categorize
+// Briefing â€?search key geopolitical/market terms and categorize
 export async function briefing() {
   const searchQueries = [
     { label: 'conflict', q: 'Iran war OR missile strike OR sanctions' },

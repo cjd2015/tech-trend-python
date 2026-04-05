@@ -1,4 +1,4 @@
-// EIA â€” US Energy Information Administration
+// EIA â€?US Energy Information Administration
 // Oil prices, natural gas, crude inventories. Free API key required.
 // Gracefully degrades without key.
 
@@ -86,7 +86,7 @@ function extractRecent(resp, count = 5) {
   }));
 }
 
-// Briefing â€” oil prices, gas prices, inventories
+// Briefing â€?oil prices, gas prices, inventories
 export async function briefing(apiKey) {
   if (!apiKey) {
     return {
@@ -113,9 +113,9 @@ export async function briefing(apiKey) {
   const brentRecent = extractRecent(brentResp, 5);
 
   if (wti && wti.value > 100) signals.push(`WTI crude above $100 at $${wti.value}/bbl`);
-  if (wti && wti.value < 50) signals.push(`WTI crude below $50 at $${wti.value}/bbl â€” supply glut or demand destruction`);
+  if (wti && wti.value < 50) signals.push(`WTI crude below $50 at $${wti.value}/bbl â€?supply glut or demand destruction`);
   if (brent && wti && (brent.value - wti.value) > 10) {
-    signals.push(`Brent-WTI spread wide at $${(brent.value - wti.value).toFixed(2)} â€” supply/logistics divergence`);
+    signals.push(`Brent-WTI spread wide at $${(brent.value - wti.value).toFixed(2)} â€?supply/logistics divergence`);
   }
 
   // Gas prices

@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CRUCIX — Initializing</title>
+<title>TechTrend �?Initializing</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
@@ -60,7 +60,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--m
 const SWEEP_ESTIMATE_S = 50; // estimated sweep duration in seconds
 
 const lines = [
-  'CRUCIX INTELLIGENCE ENGINE v2.0.0',
+  'TechTrend INTELLIGENCE ENGINE v2.0.0',
   'INITIATING FIRST SWEEP...',
   '├── CONNECTING 25 OSINT SOURCES',
   '├── GDELT · OPENSKY · FIRMS · MARITIME · SAFECAST',
@@ -129,7 +129,7 @@ fetch('/api/health')
   })
   .catch(() => startCountdown(0));
 
-// === SSE — wait for sweep to complete, then redirect ===
+// === SSE �?wait for sweep to complete, then redirect ===
 let redirected = false;
 function goToDashboard() {
   if (redirected) return;
@@ -139,7 +139,7 @@ function goToDashboard() {
   barFill.style.transition = 'width 0.4s ease';
   barFill.style.width = '100%';
   etaText.textContent = '';
-  statusText.textContent = 'TERMINAL READY — LOADING DASHBOARD';
+  statusText.textContent = 'TERMINAL READY �?LOADING DASHBOARD';
   setTimeout(() => location.replace('/'), 800);
 }
 
@@ -158,7 +158,7 @@ es.onerror = () => {
   setTimeout(() => location.reload(), 3000);
 };
 
-// === Fallback polling — in case SSE misses the update ===
+// === Fallback polling �?in case SSE misses the update ===
 const pollInterval = setInterval(() => {
   fetch('/api/data').then(r => {
     if (r.ok) goToDashboard();

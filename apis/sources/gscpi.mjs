@@ -1,7 +1,7 @@
-// GSCPI â€” NY Fed Global Supply Chain Pressure Index
+// GSCPI â€?NY Fed Global Supply Chain Pressure Index
 // Measures global supply chain stress (standard deviations from historical average).
 // Values above 0 = above average pressure. Above 1.0 = elevated. Below -1.0 = unusually loose.
-// Data fetched directly from NY Fed â€” no API key required.
+// Data fetched directly from NY Fed â€?no API key required.
 
 const GSCPI_CSV_URL = 'https://www.newyorkfed.org/medialibrary/research/interactives/data/gscpi/gscpi_interactive_data.csv';
 
@@ -14,7 +14,7 @@ export async function getGSCPI(months = 12) {
     const timer = setTimeout(() => controller.abort(), 20000);
     const res = await fetch(GSCPI_CSV_URL, {
       signal: controller.signal,
-      headers: { 'User-Agent': 'Crucix/1.0' },
+      headers: { 'User-Agent': 'TechTrend/1.0' },
     });
     clearTimeout(timer);
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
@@ -100,7 +100,7 @@ function detectTrend(history) {
   return 'stable';
 }
 
-// Briefing â€” latest GSCPI, trend, and signals
+// Briefing â€?latest GSCPI, trend, and signals
 export async function briefing() {
   const result = await getGSCPI(12);
 
@@ -120,11 +120,11 @@ export async function briefing() {
 
   if (latest) {
     if (latest.value > 2.0) {
-      signals.push(`GSCPI extremely elevated at ${latest.value.toFixed(2)} â€” severe supply chain stress`);
+      signals.push(`GSCPI extremely elevated at ${latest.value.toFixed(2)} â€?severe supply chain stress`);
     } else if (latest.value > 1.0) {
-      signals.push(`GSCPI elevated at ${latest.value.toFixed(2)} â€” above-normal supply chain pressure`);
+      signals.push(`GSCPI elevated at ${latest.value.toFixed(2)} â€?above-normal supply chain pressure`);
     } else if (latest.value < -1.0) {
-      signals.push(`GSCPI at ${latest.value.toFixed(2)} â€” unusually loose supply chains`);
+      signals.push(`GSCPI at ${latest.value.toFixed(2)} â€?unusually loose supply chains`);
     }
 
     if (trend === 'rising' && latest.value > 0) {

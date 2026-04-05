@@ -1,4 +1,4 @@
-// FRED â€” Federal Reserve Economic Data
+// FRED â€?Federal Reserve Economic Data
 // 840,000+ time series. Free API key required.
 // Key indicators: yield curve, CPI, unemployment, money supply, GDP, fed funds rate
 
@@ -52,7 +52,7 @@ async function getSeriesLatest(seriesId, apiKey) {
   return safeFetch(`${BASE}/series/observations?${params}`);
 }
 
-// Briefing â€” pull all key indicators
+// Briefing â€?pull all key indicators
 export async function briefing(apiKey) {
   if (!apiKey) {
     return {
@@ -88,11 +88,11 @@ export async function briefing(apiKey) {
   const hySpread = get('BAMLH0A0HYM2');
 
   const signals = [];
-  if (yieldCurve10y2y !== null && yieldCurve10y2y < 0) signals.push('YIELD CURVE INVERTED (10Y-2Y) â€” recession signal');
-  if (yieldCurve10y3m !== null && yieldCurve10y3m < 0) signals.push('YIELD CURVE INVERTED (10Y-3M) â€” stronger recession signal');
-  if (vix !== null && vix > 30) signals.push(`VIX ELEVATED at ${vix} â€” high fear/volatility`);
-  if (vix !== null && vix > 40) signals.push(`VIX EXTREME at ${vix} â€” crisis-level fear`);
-  if (hySpread !== null && hySpread > 5) signals.push(`HIGH YIELD SPREAD WIDE at ${hySpread}% â€” credit stress`);
+  if (yieldCurve10y2y !== null && yieldCurve10y2y < 0) signals.push('YIELD CURVE INVERTED (10Y-2Y) â€?recession signal');
+  if (yieldCurve10y3m !== null && yieldCurve10y3m < 0) signals.push('YIELD CURVE INVERTED (10Y-3M) â€?stronger recession signal');
+  if (vix !== null && vix > 30) signals.push(`VIX ELEVATED at ${vix} â€?high fear/volatility`);
+  if (vix !== null && vix > 40) signals.push(`VIX EXTREME at ${vix} â€?crisis-level fear`);
+  if (hySpread !== null && hySpread > 5) signals.push(`HIGH YIELD SPREAD WIDE at ${hySpread}% â€?credit stress`);
 
   return {
     source: 'FRED',

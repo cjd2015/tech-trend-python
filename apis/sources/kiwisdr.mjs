@@ -1,4 +1,4 @@
-// KiwiSDR Network â€” Global software-defined radio receiver network
+// KiwiSDR Network â€?Global software-defined radio receiver network
 // No auth required. ~900 public HF receivers worldwide (0-30 MHz).
 // Useful for SIGINT awareness: HF band activity, receiver distribution,
 // detecting unusual radio configurations in conflict zones.
@@ -14,7 +14,7 @@ export async function getAllReceivers() {
     const controller = new AbortController();
     const timer = setTimeout(() => controller.abort(), 20000);
     const res = await fetch(RECEIVERBOOK_URL, {
-      headers: { 'User-Agent': 'Crucix/1.0' },
+      headers: { 'User-Agent': 'TechTrend/1.0' },
       signal: controller.signal,
     });
     clearTimeout(timer);
@@ -130,7 +130,7 @@ function normalizeReceiver(rx, idx) {
   };
 }
 
-// Briefing â€” analyze the global KiwiSDR network
+// Briefing â€?analyze the global KiwiSDR network
 export async function briefing() {
   const raw = await getAllReceivers();
 
@@ -273,7 +273,7 @@ export async function briefing() {
 
   // High utilization receivers
   if (highUtilization.length > 5) {
-    signals.push(`${highUtilization.length} receivers at >80% capacity â€” elevated HF monitoring demand`);
+    signals.push(`${highUtilization.length} receivers at >80% capacity â€?elevated HF monitoring demand`);
   }
 
   return {

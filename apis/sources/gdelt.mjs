@@ -1,4 +1,4 @@
-// GDELT â€” Global Database of Events, Language, and Tone
+// GDELT â€?Global Database of Events, Language, and Tone
 // No auth required. Updates every 15 minutes. Monitors news in 100+ languages.
 // DOC 2.0 API: full-text search across last 3 months of global news
 // GEO 2.0 API: geolocation mapping of events
@@ -53,7 +53,7 @@ export async function volumeTrend(query, timespan = '7d') {
   return safeFetch(`${BASE}/doc/doc?${params}`);
 }
 
-// GEO API â€” geographic event mapping
+// GEO API â€?geographic event mapping
 export async function geoEvents(query = '', opts = {}) {
   const {
     mode = 'PointData',
@@ -89,7 +89,7 @@ function compactArticle(a) {
 // GDELT rate limit: 1 request per 5 seconds
 function delay(ms) { return new Promise(r => setTimeout(r, ms)); }
 
-// Briefing mode â€” get top global events summary (sequential due to rate limit)
+// Briefing mode â€?get top global events summary (sequential due to rate limit)
 export async function briefing() {
   // Single broad query to stay within rate limits
   const all = await searchEvents(
@@ -104,7 +104,7 @@ export async function briefing() {
     keywords.some(k => a.title?.toLowerCase().includes(k))
   );
 
-  // Geo events â€” get mapped event locations (separate API, respects rate limit)
+  // Geo events â€?get mapped event locations (separate API, respects rate limit)
   await delay(5500);
   let geoPoints = [];
   try {
@@ -116,7 +116,7 @@ export async function briefing() {
       count: f.properties?.count || 1,
       type: f.properties?.type || 'event',
     }));
-  } catch (e) { /* geo endpoint optional â€” don't break briefing */ }
+  } catch (e) { /* geo endpoint optional â€?don't break briefing */ }
 
   return {
     source: 'GDELT',

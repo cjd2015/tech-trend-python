@@ -1,4 +1,4 @@
-# Crucix Python
+# TechTrend Python
 
 A complete Python implementation of the Crucix Intelligence Engine.
 

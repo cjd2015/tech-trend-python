@@ -1,4 +1,4 @@
-// OpenSanctions â€” Global Sanctions & PEP Aggregator
+// OpenSanctions â€?Global Sanctions & PEP Aggregator
 // No auth required for basic queries. Aggregates sanctions data from
 // OFAC, EU, UN, and 30+ other sources into a unified searchable dataset.
 
@@ -69,7 +69,7 @@ const BRIEFING_QUERIES = [
   'Wagner',
 ];
 
-// Briefing â€” search for notable sanctioned entities across key targets
+// Briefing â€?search for notable sanctioned entities across key targets
 export async function briefing() {
   // Run searches in parallel
   const results = await Promise.all(

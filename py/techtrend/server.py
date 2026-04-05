@@ -1,4 +1,4 @@
-"""Crucix API Server"""
+"""TechTrend API Server"""
 from __future__ import annotations
 import asyncio
 import json
@@ -13,11 +13,11 @@ from fastapi.responses import HTMLResponse, StreamingResponse
 import uvicorn
 
 from .config import PORT, REFRESH_INTERVAL_MINUTES
-from .engine import CrucixEngine
+from .engine import TechTrendEngine
 from .i18n import get_locale, current_language, get_supported_locales
 
 
-engine: CrucixEngine | None = None
+engine: TechTrendEngine | None = None
 start_time = datetime.utcnow()
 sse_clients: set[asyncio.Queue] = set()
 loading_page_path = Path(__file__).parent.parent / "dashboard" / "public" / "loading.html"
@@ -41,7 +41,7 @@ async def sse_generator(queue: asyncio.Queue):
 async def lifespan(app: FastAPI):
     global engine
     
-    engine = CrucixEngine(Path("runs"))
+    engine = TechTrendEngine(Path("runs"))
     engine.telegram.set_engine(engine)
     
     try:

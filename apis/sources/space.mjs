@@ -1,4 +1,4 @@
-// Space/CelesTrak â€” Satellite Activity Monitoring
+// Space/CelesTrak â€?Satellite Activity Monitoring
 // No API key required. Uses CelesTrak for public TLE data and launch info.
 // Tracks: Recent launches, ISS position, satellite decay alerts, space debris.
 

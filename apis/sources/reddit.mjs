@@ -1,4 +1,4 @@
-// Reddit â€” social sentiment intelligence
+// Reddit â€?social sentiment intelligence
 // Reddit now requires OAuth for API access (public JSON API returns 403).
 // Gracefully degrades when not authenticated.
 // To enable: register an app at https://www.reddit.com/prefs/apps/ and set
@@ -30,7 +30,7 @@ async function getToken() {
       headers: {
         'Authorization': `Basic ${auth}`,
         'Content-Type': 'application/x-www-form-urlencoded',
-        'User-Agent': 'Crucix/1.0 intelligence-engine',
+        'User-Agent': 'TechTrend/1.0 intelligence-engine',
       },
       body: 'grant_type=client_credentials',
     });
@@ -42,7 +42,7 @@ async function getToken() {
   }
 }
 
-// Fetch hot posts â€” tries OAuth first, then falls back to public endpoint
+// Fetch hot posts â€?tries OAuth first, then falls back to public endpoint
 export async function getHot(subreddit, opts = {}) {
   const { limit = 10, token = null } = opts;
 
@@ -51,14 +51,14 @@ export async function getHot(subreddit, opts = {}) {
     return safeFetch(`https://oauth.reddit.com/r/${subreddit}/hot?limit=${limit}&raw_json=1`, {
       headers: {
         'Authorization': `Bearer ${token}`,
-        'User-Agent': 'Crucix/1.0 intelligence-engine',
+        'User-Agent': 'TechTrend/1.0 intelligence-engine',
       },
     });
   }
 
   // Try public endpoint (may 403)
   return safeFetch(`https://www.reddit.com/r/${subreddit}/hot.json?limit=${limit}&raw_json=1`, {
-    headers: { 'User-Agent': 'Crucix/1.0 intelligence-engine' },
+    headers: { 'User-Agent': 'TechTrend/1.0 intelligence-engine' },
   });
 }
 

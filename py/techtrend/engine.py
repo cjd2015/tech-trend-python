@@ -1,4 +1,4 @@
-"""Crucix Engine - Main orchestrator"""
+"""TechTrend Engine - Main orchestrator"""
 from __future__ import annotations
 import asyncio
 import json
@@ -24,7 +24,7 @@ from .alerts.telegram import TelegramAlerter
 from .alerts.discord import DiscordAlerter
 
 
-class CrucixEngine:
+class TechTrendEngine:
     def __init__(self, data_dir: Optional[Path] = None):
         self.data_dir = data_dir or Path("runs")
         self.data_dir.mkdir(parents=True, exist_ok=True)

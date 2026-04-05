@@ -1,4 +1,4 @@
-// NASA FIRMS â€” Fire Information for Resource Management System
+// NASA FIRMS â€?Fire Information for Resource Management System
 // Detects active fires/thermal anomalies globally within 3 hours of satellite pass.
 // Detects military strikes, explosions, wildfires, industrial fires.
 
@@ -37,7 +37,7 @@ async function fetchFires(opts = {}) {
   try {
     const res = await fetch(url, {
       signal: controller.signal,
-      headers: { 'User-Agent': 'Crucix/1.0' },
+      headers: { 'User-Agent': 'TechTrend/1.0' },
     });
     clearTimeout(timer);
     if (!res.ok) return { error: `HTTP ${res.status}` };
@@ -68,7 +68,7 @@ function analyzeFires(fires, regionLabel) {
   const highConf = fires.filter(f => f.confidence === 'h' || f.confidence === 'high');
   const nomConf = fires.filter(f => f.confidence === 'n' || f.confidence === 'nominal');
 
-  // High intensity fires (FRP > 10 MW) â€” potential strikes, industrial fires, large explosions
+  // High intensity fires (FRP > 10 MW) â€?potential strikes, industrial fires, large explosions
   const highIntensity = fires
     .filter(f => parseFloat(f.frp) > 10)
     .map(f => ({

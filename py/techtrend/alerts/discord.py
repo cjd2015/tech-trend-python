@@ -222,7 +222,7 @@ class DiscordAlerter:
 
         from datetime import datetime
         return {
-            "title": f"{tc.get('emoji', '⚪')} Crucix {tc.get('label', 'ALERT')}",
+            "title": f"{tc.get('emoji', '⚪')} TechTrend {tc.get('label', 'ALERT')}",
             "description": f"**{evaluation.get('headline', 'Alert')}**\n{evaluation.get('reason', '')}",
             "color": tc.get("color", 0x3498DB),
             "fields": fields,

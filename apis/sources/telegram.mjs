@@ -1,4 +1,4 @@
-// Telegram — public channel intelligence from conflict zones and OSINT analysts
+// Telegram �?public channel intelligence from conflict zones and OSINT analysts
 // Primary mode: Bot API with TELEGRAM_BOT_TOKEN (getUpdates, getChat)
 // Fallback mode: Scrape public channel web previews at https://t.me/s/{channel}
 // Monitors conflict zones (Ukraine, Middle East), geopolitics, and OSINT channels.
@@ -373,7 +373,7 @@ export async function briefing() {
 // ─── CLI runner ─────────────────────────────────────────────────────────────
 
 if (process.argv[1]?.endsWith('telegram.mjs')) {
-  console.log('Telegram OSINT — fetching public channel intelligence...\n');
+  console.log('Telegram OSINT �?fetching public channel intelligence...\n');
   const data = await briefing();
   console.log(JSON.stringify(data, null, 2));
 }

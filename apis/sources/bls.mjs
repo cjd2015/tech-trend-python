@@ -1,4 +1,4 @@
-// BLS â€” Bureau of Labor Statistics
+// BLS â€?Bureau of Labor Statistics
 // CPI, unemployment, nonfarm payrolls, PPI. No auth required (v1 API).
 // v2 with registration key supports more requests; v1 is rate-limited but functional.
 
@@ -92,7 +92,7 @@ function momChange(seriesData) {
   };
 }
 
-// Briefing â€” pull latest CPI, unemployment, payrolls
+// Briefing â€?pull latest CPI, unemployment, payrolls
 export async function briefing(apiKey) {
   const seriesIds = Object.keys(SERIES);
   const resp = await getSeries(seriesIds, { apiKey });

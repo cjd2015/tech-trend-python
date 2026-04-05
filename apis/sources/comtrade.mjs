@@ -1,4 +1,4 @@
-// UN Comtrade â€” Global Trade Data
+// UN Comtrade â€?Global Trade Data
 // Public preview endpoint requires no key. Full API needs free registration.
 // Tracks commodity trade flows between nations: crude oil, gas, gold, semiconductors, arms.
 // Reporter codes: 842 (US), 156 (China), 276 (Germany), 392 (Japan), 826 (UK), 643 (Russia), 356 (India)
@@ -125,7 +125,7 @@ function detectAnomalies(tradeRecords) {
   return signals;
 }
 
-// Briefing â€” check recent trade data for key commodities, detect anomalies
+// Briefing â€?check recent trade data for key commodities, detect anomalies
 export async function briefing() {
   const currentYear = new Date().getFullYear();
   const prevYear = currentYear - 1;

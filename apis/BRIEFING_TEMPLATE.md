@@ -1,4 +1,4 @@
-# Crucix Briefing Template
+# TechTrend Briefing Template
 
 Use this output shape for every intelligence briefing.
 

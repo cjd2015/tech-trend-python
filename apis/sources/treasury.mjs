@@ -1,4 +1,4 @@
-// US Treasury Fiscal Data â€” Government debt, spending, yields
+// US Treasury Fiscal Data â€?Government debt, spending, yields
 // No auth required. Daily updates.
 
 import { safeFetch, today, daysAgo } from '../utils/fetch.mjs';
@@ -38,7 +38,7 @@ export async function getAvgInterestRates() {
   return safeFetch(`${BASE}/v2/accounting/od/avg_interest_rates?${params}`);
 }
 
-// Briefing â€” key treasury data
+// Briefing â€?key treasury data
 export async function briefing() {
   const [debt, rates] = await Promise.all([
     getDebtToThePenny(14),

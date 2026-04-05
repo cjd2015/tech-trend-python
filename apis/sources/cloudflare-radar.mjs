@@ -1,7 +1,7 @@
-// Cloudflare Radar â€” Internet traffic anomalies and outages
+// Cloudflare Radar â€?Internet traffic anomalies and outages
 // Requires a free Cloudflare API token (CLOUDFLARE_API_TOKEN).
 // Get one at: https://dash.cloudflare.com/profile/api-tokens
-// Create a custom token with Account â†’ Account Analytics â†’ Read permission.
+// Create a custom token with Account â†?Account Analytics â†?Read permission.
 //
 // Monitors internet outages, traffic anomalies, and attack trends
 // that correlate with conflict, censorship, and infrastructure disruption.
@@ -27,7 +27,7 @@ async function fetchAnnotations() {
   const headers = getAuthHeaders();
   if (!headers) return { error: 'no_credentials' };
 
-  // Cloudflare Radar Annotations â€” internet outages and government shutdowns
+  // Cloudflare Radar Annotations â€?internet outages and government shutdowns
   const url = `${RADAR_BASE}/annotations/outages?dateRange=30d&format=json`;
   const data = await safeFetch(url, { timeout: 15000, headers });
 
@@ -78,7 +78,7 @@ async function fetchTrafficAnomalies() {
   const headers = getAuthHeaders();
   if (!headers) return { error: 'no_credentials' };
 
-  // Traffic anomalies â€” significant deviations from normal patterns
+  // Traffic anomalies â€?significant deviations from normal patterns
   const url = `${RADAR_BASE}/traffic_anomalies?dateRange=7d&format=json&limit=50`;
   const data = await safeFetch(url, { timeout: 15000, headers });
 
@@ -111,7 +111,7 @@ function buildSignals(outages, anomalies) {
     const countries = [...new Set(watchlistOutages.flatMap(o => o.locations))].filter(l => WATCHLIST_COUNTRIES.includes(l));
     signals.push({
       severity: 'high',
-      signal: `Internet outages detected in ${countries.join(', ')} â€” possible government shutdown or infrastructure attack`,
+      signal: `Internet outages detected in ${countries.join(', ')} â€?possible government shutdown or infrastructure attack`,
     });
   }
 
@@ -130,7 +130,7 @@ function buildSignals(outages, anomalies) {
   if (repeated.length > 0) {
     signals.push({
       severity: 'medium',
-      signal: `Sustained internet disruptions in ${repeated.join(', ')} â€” ${repeated.length} locations with 3+ outage events in 30 days`,
+      signal: `Sustained internet disruptions in ${repeated.join(', ')} â€?${repeated.length} locations with 3+ outage events in 30 days`,
     });
   }
 
@@ -138,7 +138,7 @@ function buildSignals(outages, anomalies) {
   if (Array.isArray(anomalies) && anomalies.length > 10) {
     signals.push({
       severity: 'medium',
-      signal: `${anomalies.length} traffic anomalies detected globally in last 7 days â€” elevated internet instability`,
+      signal: `${anomalies.length} traffic anomalies detected globally in last 7 days â€?elevated internet instability`,
     });
   }
 
@@ -151,7 +151,7 @@ export async function briefing() {
       source: 'Cloudflare-Radar',
       timestamp: new Date().toISOString(),
       status: 'no_credentials',
-      message: 'Set CLOUDFLARE_API_TOKEN in .env. Get a free token at https://dash.cloudflare.com/profile/api-tokens with Account â†’ Account Analytics â†’ Read permission.',
+      message: 'Set CLOUDFLARE_API_TOKEN in .env. Get a free token at https://dash.cloudflare.com/profile/api-tokens with Account â†?Account Analytics â†?Read permission.',
     };
   }
 

@@ -1,4 +1,4 @@
-// Yahoo Finance â€” Live market quotes (no API key required)
+// Yahoo Finance â€?Live market quotes (no API key required)
 // Provides real-time prices for stocks, ETFs, crypto, commodities
 // Replaces the need for Alpaca or any paid market data provider
 
@@ -6,7 +6,7 @@ import { safeFetch } from '../utils/fetch.mjs';
 
 const BASE = 'https://query1.finance.yahoo.com/v8/finance/chart';
 
-// Symbols to track â€” covers broad market, rates, commodities, crypto, volatility
+// Symbols to track â€?covers broad market, rates, commodities, crypto, volatility
 const SYMBOLS = {
   // Indexes / ETFs
   '^GSPC': 'S&P 500',

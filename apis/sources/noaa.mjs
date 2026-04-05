@@ -1,4 +1,4 @@
-// NOAA / National Weather Service â€” Severe weather alerts & climate events
+// NOAA / National Weather Service â€?Severe weather alerts & climate events
 // No auth required. Real-time alerts.
 
 import { safeFetch } from '../utils/fetch.mjs';
@@ -29,7 +29,7 @@ export async function getSevereAlerts() {
   return getActiveAlerts({ severity: 'Extreme,Severe' });
 }
 
-// Briefing â€” severe weather events that could impact markets/supply chains
+// Briefing â€?severe weather events that could impact markets/supply chains
 export async function briefing() {
   const alerts = await getSevereAlerts();
   const features = alerts?.features || [];

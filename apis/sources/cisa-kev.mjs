@@ -1,6 +1,6 @@
-// CISA KEV â€” Known Exploited Vulnerabilities Catalog
+// CISA KEV â€?Known Exploited Vulnerabilities Catalog
 // No auth required. Tracks CVEs actively exploited in the wild.
-// Federal agencies must patch these within due dates â€” useful signal
+// Federal agencies must patch these within due dates â€?useful signal
 // for cybersecurity posture and active threat landscape.
 
 import { safeFetch } from '../utils/fetch.mjs';
@@ -100,13 +100,13 @@ export async function briefing() {
     knownRansomwareCampaignUse: v.knownRansomwareCampaignUse,
   }));
 
-  // Signals â€” actionable intelligence
+  // Signals â€?actionable intelligence
   const signals = [];
 
   if (summary.recentAdditions > 5) {
     signals.push({
       severity: 'high',
-      signal: `${summary.recentAdditions} new KEV entries in last 30 days â€” elevated exploit activity`,
+      signal: `${summary.recentAdditions} new KEV entries in last 30 days â€?elevated exploit activity`,
     });
   }
 
