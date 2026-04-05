@@ -1,0 +1,920 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-width=1.0">
+    <title>TechRadar - 技术情报平台</title>
+    <style>
+        :root {
+            --bg: #0d1117;
+            --bg2: #161b22;
+            --bg3: #21262d;
+            --border: #30363d;
+            --text: #c9d1d9;
+            --text2: #8b949e;
+            --hn-color: #ff6600;
+            --arxiv-color: #0066ff;
+            --patent-color: #238636;
+            --book-color: #8957e5;
+            --accent: #58a6ff;
+            --green: #3fb950;
+            --red: #f85149;
+            --yellow: #d29922;
+        }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'JetBrains Mono', 'SF Mono', 'Fira Code', monospace;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        .layout {
+            display: flex;
+            height: 100vh;
+        }
+        
+        /* Sidebar */
+        .sidebar {
+            width: 60px;
+            background: var(--bg2);
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 1rem 0;
+            gap: 1rem;
+        }
+        
+        .sidebar-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 1.2rem;
+        }
+        
+        .sidebar-icon:hover { background: var(--bg3); }
+        .sidebar-icon.active { background: var(--accent); color: var(--bg); }
+        .sidebar-logo { background: linear-gradient(135deg, var(--accent), #a371f7); }
+        
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--green);
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+        
+        /* Main Content */
+        .main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        
+        /* Header */
+        .header {
+            height: 60px;
+            background: var(--bg2);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 1.5rem;
+        }
+        
+        .header-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .header-actions {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+        
+        .sync-btn {
+            background: var(--accent);
+            color: var(--bg);
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 0.85rem;
+        }
+        
+        .sync-btn:hover { opacity: 0.9; }
+        
+        .last-update {
+            font-size: 0.75rem;
+            color: var(--text2);
+        }
+        
+        /* Dashboard Grid */
+        .dashboard {
+            flex: 1;
+            padding: 1rem;
+            overflow-y: auto;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-template-rows: auto 1fr;
+            gap: 1rem;
+        }
+        
+        /* Metric Cards */
+        .metric-cards {
+            grid-column: 1 / -1;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+        }
+        
+        .metric-card {
+            background: var(--bg2);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        
+        .metric-label {
+            font-size: 0.75rem;
+            color: var(--text2);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .metric-value {
+            font-size: 1.8rem;
+            font-weight: 700;
+            display: flex;
+            align-items: baseline;
+            gap: 0.5rem;
+        }
+        
+        .metric-trend {
+            font-size: 0.8rem;
+            color: var(--green);
+        }
+        
+        .metric-trend.negative { color: var(--red); }
+        
+        /* Topic Radar */
+        .topics-section {
+            grid-column: 1 / 3;
+            background: var(--bg2);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            max-height: 500px;
+            overflow: hidden;
+        }
+        
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .section-title {
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+        
+        .topic-list {
+            flex: 1;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+        
+        .topic-card {
+            background: var(--bg3);
+            border-radius: 8px;
+            padding: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .topic-sparkline {
+            display: flex;
+            align-items: flex-end;
+            gap: 2px;
+            height: 30px;
+            width: 80px;
+        }
+        
+        .spark-bar {
+            flex: 1;
+            background: var(--accent);
+            border-radius: 2px;
+            min-height: 3px;
+        }
+        
+        .spark-bar.hn { background: var(--hn-color); }
+        .spark-bar.arxiv { background: var(--arxiv-color); }
+        .spark-bar.patent { background: var(--patent-color); }
+        .spark-bar.book { background: var(--book-color); }
+        
+        .topic-info {
+            flex: 1;
+        }
+        
+        .topic-name {
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-bottom: 0.25rem;
+        }
+        
+        .topic-stage {
+            font-size: 0.7rem;
+            padding: 0.15rem 0.5rem;
+            border-radius: 4px;
+            display: inline-block;
+        }
+        
+        .stage-emerging { background: rgba(88, 166, 255, 0.2); color: var(--accent); }
+        .stage-accelerating { background: rgba(210, 153, 34, 0.2); color: var(--yellow); }
+        .stage-maturing { background: rgba(63, 185, 80, 0.2); color: var(--green); }
+        .stage-commercializing { background: rgba(137, 87, 229, 0.2); color: var(--book-color); }
+        
+        .topic-confidence {
+            font-size: 0.7rem;
+            color: var(--text2);
+        }
+        
+        /* Feed Section */
+        .feed-section {
+            grid-column: 3 / -1;
+            background: var(--bg2);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            max-height: 500px;
+            overflow: hidden;
+        }
+        
+        .feed-filters {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .feed-filter {
+            padding: 0.3rem 0.75rem;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            cursor: pointer;
+            border: 1px solid var(--border);
+            background: transparent;
+            color: var(--text2);
+            transition: all 0.2s;
+        }
+        
+        .feed-filter:hover { border-color: var(--text); }
+        .feed-filter.active { background: var(--accent); color: var(--bg); border-color: var(--accent); }
+        
+        .feed-list {
+            flex: 1;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        
+        .feed-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            padding: 0.75rem;
+            background: var(--bg3);
+            border-radius: 8px;
+            border-left: 3px solid;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .feed-item:hover { background: var(--border); }
+        .feed-item.hn { border-left-color: var(--hn-color); }
+        .feed-item.arxiv { border-left-color: var(--arxiv-color); }
+        .feed-item.patent { border-left-color: var(--patent-color); }
+        .feed-item.book { border-left-color: var(--book-color); }
+        .feed-item.github { border-left-color: #f0f6fc; }
+        
+        .feed-source {
+            font-size: 0.65rem;
+            padding: 0.15rem 0.4rem;
+            border-radius: 3px;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+        
+        .feed-source.hn { background: var(--hn-color); color: white; }
+        .feed-source.arxiv { background: var(--arxiv-color); color: white; }
+        .feed-source.patent { background: var(--patent-color); color: white; }
+        .feed-source.book { background: var(--book-color); color: white; }
+        .feed-source.github { background: #f0f6fc; color: #24292f; }
+        
+        .feed-content {
+            flex: 1;
+            min-width: 0;
+        }
+        
+        .feed-title {
+            font-size: 0.85rem;
+            line-height: 1.4;
+            margin-bottom: 0.25rem;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        
+        .feed-title a {
+            color: var(--text);
+            text-decoration: none;
+        }
+        
+        .feed-title a:hover { color: var(--accent); }
+        
+        .feed-meta {
+            font-size: 0.7rem;
+            color: var(--text2);
+            display: flex;
+            gap: 0.75rem;
+        }
+        
+        .feed-stats {
+            font-size: 0.7rem;
+            color: var(--text2);
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .feed-stat {
+            display: flex;
+            align-items: center;
+            gap: 0.2rem;
+        }
+        
+        /* Copilot Panel */
+        .copilot {
+            grid-column: 1 / -1;
+            background: var(--bg2);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1rem;
+            min-height: 200px;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .copilot-messages {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            max-height: 150px;
+            overflow-y: auto;
+        }
+        
+        .copilot-msg {
+            padding: 0.75rem;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            line-height: 1.5;
+        }
+        
+        .copilot-msg.user {
+            background: var(--bg3);
+            align-self: flex-end;
+        }
+        
+        .copilot-msg.assistant {
+            background: rgba(88, 166, 255, 0.1);
+            border-left: 3px solid var(--accent);
+        }
+        
+        .copilot-input {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 0.75rem;
+        }
+        
+        .copilot-input input {
+            flex: 1;
+            background: var(--bg3);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 0.75rem;
+            color: var(--text);
+            font-family: inherit;
+            font-size: 0.85rem;
+        }
+        
+        .copilot-input input:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+        
+        .copilot-input button {
+            background: var(--accent);
+            color: var(--bg);
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        
+        /* Source Status */
+        .sources-status {
+            grid-column: 1 / -1;
+            display: flex;
+            gap: 1rem;
+            padding: 0.75rem;
+            background: var(--bg2);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 0.8rem;
+        }
+        
+        .source-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .source-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+        }
+        
+        .source-dot.online { background: var(--green); }
+        .source-dot.offline { background: var(--red); }
+        
+        /* Loading */
+        .loading {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            color: var(--text2);
+        }
+        
+        .loading::after {
+            content: '';
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--border);
+            border-top-color: var(--accent);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-left: 0.75rem;
+        }
+        
+        @keyframes spin { to { transform: rotate(360deg); } }
+        
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .dashboard {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .topics-section, .feed-section {
+                grid-column: 1 / -1;
+            }
+            .metric-cards {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="layout">
+        <aside class="sidebar">
+            <div class="sidebar-icon sidebar-logo">🔭</div>
+            <div class="sidebar-icon active">📊</div>
+            <div class="sidebar-icon">📡</div>
+            <div class="sidebar-icon">💬</div>
+            <div class="sidebar-icon">⚙️</div>
+            <div style="margin-top: auto;">
+                <div class="status-dot" title="All services online"></div>
+            </div>
+        </aside>
+        
+        <main class="main">
+            <header class="header">
+                <div class="header-title">
+                    <span>🔭</span>
+                    <span>TechRadar</span>
+                </div>
+                <div class="header-actions">
+                    <span class="last-update" id="lastUpdate">Last sync: --</span>
+                    <button class="sync-btn" onclick="triggerSync()">⟳ Sync</button>
+                </div>
+            </header>
+            
+            <div class="dashboard">
+                <!-- Metrics -->
+                <div class="metric-cards">
+                    <div class="metric-card">
+                        <span class="metric-label">Total Entities</span>
+                        <span class="metric-value">
+                            <span id="totalEntities">0</span>
+                            <span class="metric-trend" id="entitiesTrend">+0</span>
+                        </span>
+                    </div>
+                    <div class="metric-card">
+                        <span class="metric-label">Monitored Topics</span>
+                        <span class="metric-value">
+                            <span id="monitoredTopics">0</span>
+                        </span>
+                    </div>
+                    <div class="metric-card">
+                        <span class="metric-label">Collected Signals</span>
+                        <span class="metric-value">
+                            <span id="collectedSignals">0</span>
+                            <span class="metric-trend" id="signalsTrend">+0</span>
+                        </span>
+                    </div>
+                    <div class="metric-card">
+                        <span class="metric-label">Data Sources</span>
+                        <span class="metric-value">
+                            <span id="sourcesOnline">0</span><span style="font-size: 1rem; color: var(--text2)">/0</span>
+                        </span>
+                    </div>
+                </div>
+                
+                <!-- Topics Radar -->
+                <div class="topics-section">
+                    <div class="section-header">
+                        <span class="section-title">📡 Topic Radar</span>
+                        <button class="feed-filter" onclick="addTopic()">+ Add</button>
+                    </div>
+                    <div class="topic-list" id="topicList">
+                        <div class="loading">Loading topics...</div>
+                    </div>
+                </div>
+                
+                <!-- Feed -->
+                <div class="feed-section">
+                    <div class="section-header">
+                        <span class="section-title">📥 Signal Feed</span>
+                    </div>
+                    <div class="feed-filters">
+                        <button class="feed-filter active" data-filter="all">All</button>
+                        <button class="feed-filter" data-filter="hn">HN</button>
+                        <button class="feed-filter" data-filter="github">GitHub</button>
+                        <button class="feed-filter" data-filter="arxiv">arXiv</button>
+                        <button class="feed-filter" data-filter="patent">Patents</button>
+                    </div>
+                    <div class="feed-list" id="feedList">
+                        <div class="loading">Loading signals...</div>
+                    </div>
+                </div>
+                
+                <!-- Source Status -->
+                <div class="sources-status" id="sourcesStatus">
+                    <div class="source-item">
+                        <span class="source-dot online"></span>
+                        <span>Hacker News</span>
+                    </div>
+                    <div class="source-item">
+                        <span class="source-dot online"></span>
+                        <span>GitHub</span>
+                    </div>
+                    <div class="source-item">
+                        <span class="source-dot online"></span>
+                        <span>AI Projects</span>
+                    </div>
+                    <div class="source-item">
+                        <span class="source-dot online"></span>
+                        <span>Autonomous</span>
+                    </div>
+                </div>
+                
+                <!-- Copilot -->
+                <div class="copilot">
+                    <div class="section-header">
+                        <span class="section-title">🤖 Tech Assistant</span>
+                    </div>
+                    <div class="copilot-messages" id="copilotMessages">
+                        <div class="copilot-msg assistant">
+                            Hello! I can help you analyze tech trends. Ask me about any technology topic you're tracking.
+                        </div>
+                    </div>
+                    <div class="copilot-input">
+                        <input type="text" id="copilotInput" placeholder="Ask about tech trends, e.g., 'What about Rust in AI?'" onkeypress="handleCopilotKey(event)">
+                        <button onclick="sendCopilotMessage()">Send</button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    
+    <script>
+        let data = null;
+        let currentFilter = 'all';
+        
+        // Default topics for demo
+        const defaultTopics = [
+            { name: 'LLM Quantization', stage: 'accelerating', confidence: 'HIGH', hn: 65, arxiv: 80, patent: 45, book: 20 },
+            { name: 'Rust in AI', stage: 'emerging', confidence: 'MEDIUM', hn: 40, arxiv: 55, patent: 30, book: 15 },
+            { name: 'WebAssembly', stage: 'maturing', confidence: 'HIGH', hn: 50, arxiv: 35, patent: 70, book: 85 },
+            { name: 'AI Agents', stage: 'accelerating', confidence: 'HIGH', hn: 90, arxiv: 85, patent: 60, book: 25 },
+            { name: 'Self-Driving', stage: 'commercializing', confidence: 'MEDIUM', hn: 45, arxiv: 70, patent: 95, book: 50 },
+        ];
+        
+        function fmt(iso) {
+            if (!iso) return '--';
+            return new Date(iso).toLocaleString();
+        }
+        
+        function render() {
+            if (!data) {
+                renderDemo();
+                return;
+            }
+            renderMetrics();
+            renderTopics();
+            renderFeed();
+            renderSources();
+            document.getElementById('lastUpdate').textContent = `Last sync: ${fmt(data.meta?.timestamp)}`;
+        }
+        
+        function renderDemo() {
+            // Demo mode when no data
+            document.getElementById('totalEntities').textContent = '1,247';
+            document.getElementById('monitoredTopics').textContent = defaultTopics.length;
+            document.getElementById('collectedSignals').textContent = '892';
+            document.getElementById('sourcesOnline').textContent = '4';
+            document.getElementById('entitiesTrend').textContent = '+23';
+            document.getElementById('signalsTrend').textContent = '+18';
+            
+            renderTopicsList(defaultTopics);
+            renderFeedList([]);
+        }
+        
+        function renderMetrics() {
+            const hn = data.hackernews?.articles?.length || 0;
+            const gh = data.github?.repos?.length || 0;
+            const ai = data.ai_projects?.projects?.length || 0;
+            const auto = data.autonomous?.projects?.length || 0;
+            
+            const total = hn + gh + ai + auto;
+            document.getElementById('totalEntities').textContent = total.toLocaleString();
+            document.getElementById('collectedSignals').textContent = total.toLocaleString();
+            
+            const health = data.health || [];
+            const online = health.filter(h => h.ok).length;
+            document.getElementById('sourcesOnline').textContent = online;
+            
+            document.getElementById('monitoredTopics').textContent = defaultTopics.length;
+        }
+        
+        function renderTopics() {
+            renderTopicsList(defaultTopics);
+        }
+        
+        function renderTopicsList(topics) {
+            const list = document.getElementById('topicList');
+            if (!topics.length) {
+                list.innerHTML = '<div class="loading">No topics yet. Add a topic to start tracking.</div>';
+                return;
+            }
+            
+            let html = '';
+            for (const topic of topics) {
+                const maxVal = Math.max(topic.hn, topic.arxiv, topic.patent, topic.book);
+                const h = (topic.hn / maxVal) * 30;
+                const a = (topic.arxiv / maxVal) * 30;
+                const p = (topic.patent / maxVal) * 30;
+                const b = (topic.book / maxVal) * 30;
+                
+                html += `
+                    <div class="topic-card">
+                        <div class="topic-sparkline">
+                            <div class="spark-bar hn" style="height: ${h}px" title="HN: ${topic.hn}"></div>
+                            <div class="spark-bar arxiv" style="height: ${a}px" title="arXiv: ${topic.arxiv}"></div>
+                            <div class="spark-bar patent" style="height: ${p}px" title="Patent: ${topic.patent}"></div>
+                            <div class="spark-bar book" style="height: ${b}px" title="Book: ${topic.book}"></div>
+                        </div>
+                        <div class="topic-info">
+                            <div class="topic-name">${topic.name}</div>
+                            <span class="topic-stage stage-${topic.stage}">${topic.stage}</span>
+                            <span class="topic-confidence">${topic.confidence}</span>
+                        </div>
+                    </div>
+                `;
+            }
+            list.innerHTML = html;
+        }
+        
+        function renderFeed() {
+            const items = [];
+            
+            // Add HackerNews
+            if (data.hackernews?.articles) {
+                for (const art of data.hackernews.articles.slice(0, 8)) {
+                    items.push({
+                        type: 'hn',
+                        source: 'HN',
+                        title: art.title,
+                        url: art.url,
+                        meta: art.by,
+                        stats: `${art.score} points`,
+                        time: art.time
+                    });
+                }
+            }
+            
+            // Add GitHub
+            if (data.github?.repos) {
+                for (const repo of data.github.repos.slice(0, 8)) {
+                    items.push({
+                        type: 'github',
+                        source: 'GitHub',
+                        title: repo.name,
+                        url: repo.url,
+                        meta: repo.language || 'Code',
+                        stats: `⭐ ${repo.stars?.toLocaleString()}`,
+                        time: repo.created
+                    });
+                }
+            }
+            
+            // Add AI Projects
+            if (data.ai_projects?.projects) {
+                for (const p of data.ai_projects.projects.slice(0, 5)) {
+                    items.push({
+                        type: 'hn',
+                        source: 'AI',
+                        title: p.name,
+                        url: 'https://github.com/' + p.name,
+                        meta: p.language || 'Code',
+                        stats: `⭐ ${p.stars?.toLocaleString()}`,
+                        time: null
+                    });
+                }
+            }
+            
+            renderFeedList(items);
+        }
+        
+        function renderFeedList(items) {
+            const list = document.getElementById('feedList');
+            
+            if (currentFilter !== 'all') {
+                items = items.filter(i => i.source.toLowerCase() === currentFilter);
+            }
+            
+            if (!items.length) {
+                list.innerHTML = '<div class="loading">No signals to display</div>';
+                return;
+            }
+            
+            let html = '';
+            for (const item of items) {
+                const timeStr = item.time ? new Date(item.time * 1000 || item.time).toLocaleDateString() : '';
+                html += `
+                    <div class="feed-item ${item.type}">
+                        <span class="feed-source ${item.type}">${item.source}</span>
+                        <div class="feed-content">
+                            <div class="feed-title">
+                                <a href="${item.url || '#'}" target="_blank">${item.title}</a>
+                            </div>
+                            <div class="feed-meta">
+                                <span>${item.meta}</span>
+                                <span class="feed-stats">
+                                    <span class="feed-stat">${item.stats}</span>
+                                </span>
+                                ${timeStr ? `<span>${timeStr}</span>` : ''}
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+            list.innerHTML = html;
+        }
+        
+        function renderSources() {
+            const health = data?.health || [];
+            const status = document.getElementById('sourcesStatus');
+            
+            const sources = [
+                { name: 'Hacker News', key: 'HackerNews' },
+                { name: 'GitHub', key: 'GitHub' },
+                { name: 'AI Projects', key: 'AI-Projects' },
+                { name: 'Autonomous', key: 'Autonomous' },
+            ];
+            
+            let html = '';
+            for (const s of sources) {
+                const h = health.find(h => h.name === s.key);
+                const online = h?.ok !== false;
+                html += `
+                    <div class="source-item">
+                        <span class="source-dot ${online ? 'online' : 'offline'}"></span>
+                        <span>${s.name}</span>
+                    </div>
+                `;
+            }
+            status.innerHTML = html;
+        }
+        
+        // Filter handlers
+        document.querySelectorAll('.feed-filter').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.feed-filter').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                currentFilter = btn.dataset.filter;
+                if (data) renderFeed();
+                else renderFeedList([]);
+            });
+        });
+        
+        // Copilot
+        function handleCopilotKey(e) {
+            if (e.key === 'Enter') sendCopilotMessage();
+        }
+        
+        function sendCopilotMessage() {
+            const input = document.getElementById('copilotInput');
+            const msg = input.value.trim();
+            if (!msg) return;
+            
+            const messages = document.getElementById('copilotMessages');
+            messages.innerHTML += `<div class="copilot-msg user">${msg}</div>`;
+            messages.innerHTML += `<div class="copilot-msg assistant">Analyzing "${msg}"...<br><br>This feature requires LLM configuration. Add LLM_PROVIDER and API key in .env to enable AI analysis.</div>`;
+            input.value = '';
+            messages.scrollTop = messages.scrollHeight;
+        }
+        
+        function addTopic() {
+            const name = prompt('Enter topic name:');
+            if (name) {
+                defaultTopics.push({
+                    name: name,
+                    stage: 'emerging',
+                    confidence: 'LOW',
+                    hn: Math.floor(Math.random() * 50),
+                    arxiv: Math.floor(Math.random() * 50),
+                    patent: Math.floor(Math.random() * 50),
+                    book: Math.floor(Math.random() * 50),
+                });
+                renderTopics();
+            }
+        }
+        
+        function triggerSync() {
+            fetch('/api/sweep', { method: 'POST' });
+            setTimeout(loadData, 3000);
+        }
+        
+        async function loadData() {
+            try {
+                const res = await fetch('/api/data');
+                if (res.ok) {
+                    data = await res.json();
+                    render();
+                }
+            } catch (e) {
+                console.log('Using demo mode');
+                renderDemo();
+            }
+        }
+        
+        // Initialize
+        loadData();
+        setInterval(loadData, 60000);
+    </script>
+</body>
+</html>

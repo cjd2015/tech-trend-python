@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crucix Lite</title>
+    <style>
+        :root {
+            --bg-primary: #0b1220;
+            --bg-secondary: #111827;
+            --bg-card: #1a2332;
+            --text-primary: #e5e7eb;
+            --text-secondary: #9ca3af;
+            --accent: #00d4ff;
+            --success: #22c55e;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --border: #2d3748;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(ellipse at 20% 20%, rgba(0, 212, 255, 0.05) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 80%, rgba(0, 212, 255, 0.03) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: -1;
+        }
+        
+        .header {
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--accent), #0066ff);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.25rem;
+        }
+        
+        .logo-text {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--accent), #fff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .status-bar {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+        
+        .status-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.875rem;
+        }
+        
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--success);
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        .main {
+            padding: 2rem;
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+        
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            transition: border-color 0.3s;
+        }
+        
+        .card:hover {
+            border-color: var(--accent);
+        }
+        
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .card-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .card-badge {
+            font-size: 0.75rem;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            background: rgba(0, 212, 255, 0.1);
+            color: var(--accent);
+        }
+        
+        .card-content {
+            min-height: 120px;
+        }
+        
+        .loading {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 120px;
+            color: var(--text-secondary);
+        }
+        
+        .loading::after {
+            content: '';
+            width: 24px;
+            height: 24px;
+            border: 2px solid var(--border);
+            border-top-color: var(--accent);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-left: 0.75rem;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .metric {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .metric:last-child {
+            border-bottom: none;
+        }
+        
+        .metric-label {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+        }
+        
+        .metric-value {
+            font-weight: 600;
+            font-size: 1.125rem;
+        }
+        
+        .metric-change {
+            font-size: 0.75rem;
+            margin-left: 0.5rem;
+        }
+        
+        .positive { color: var(--success); }
+        .negative { color: var(--danger); }
+        
+        .news-item {
+            padding: 0.75rem 0;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .news-item:last-child {
+            border-bottom: none;
+        }
+        
+        .news-title {
+            font-size: 0.875rem;
+            color: var(--text-primary);
+            margin-bottom: 0.25rem;
+            line-height: 1.4;
+        }
+        
+        .news-meta {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+        
+        .delta-panel {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .delta-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+        
+        .delta-direction {
+            font-size: 1.25rem;
+            font-weight: 700;
+        }
+        
+        .signal-item {
+            padding: 0.5rem;
+            margin: 0.5rem 0;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 6px;
+            border-left: 3px solid var(--accent);
+        }
+        
+        .signal-critical { border-left-color: var(--danger); }
+        .signal-high { border-left-color: var(--warning); }
+        
+        .health-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.5rem;
+        }
+        
+        .health-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 4px;
+            font-size: 0.875rem;
+        }
+        
+        .health-ok { color: var(--success); }
+        .health-error { color: var(--danger); }
+        
+        .refresh-btn {
+            background: var(--accent);
+            color: var(--bg-primary);
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+        
+        .refresh-btn:hover {
+            opacity: 0.9;
+        }
+        
+        .refresh-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                gap: 1rem;
+                padding: 1rem;
+            }
+            
+            .main {
+                padding: 1rem;
+            }
+            
+            .grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="logo">
+            <div class="logo-icon">C</div>
+            <span class="logo-text">CRUCIX LITE</span>
+        </div>
+        
+        <div class="status-bar">
+            <div class="status-item">
+                <div class="status-dot" id="statusDot"></div>
+                <span id="statusText">Connecting...</span>
+            </div>
+            <div class="status-item">
+                <span id="lastUpdate">--</span>
+            </div>
+            <button class="refresh-btn" id="refreshBtn" onclick="triggerSweep()">
+                Refresh
+            </button>
+        </div>
+    </header>
+    
+    <main class="main">
+        <div class="delta-panel" id="deltaPanel" style="display: none;">
+            <div class="delta-header">
+                <span class="delta-direction" id="deltaDirection">MIXED</span>
+                <span id="deltaSummary">0 changes</span>
+            </div>
+            <div id="deltaSignals"></div>
+        </div>
+        
+        <div class="grid">
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-title">
+                        <span>📊</span> Markets
+                    </span>
+                </div>
+                <div class="card-content" id="marketsCard">
+                    <div class="loading">Loading market data</div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-title">
+                        <span>📈</span> Economic Indicators
+                    </span>
+                    <span class="card-badge" id="fredBadge">--</span>
+                </div>
+                <div class="card-content" id="fredCard">
+                    <div class="loading">Loading FRED data</div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-title">
+                        <span>⛽</span> Energy
+                    </span>
+                </div>
+                <div class="card-content" id="energyCard">
+                    <div class="loading">Loading energy data</div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-title">
+                        <span>🛰️</span> Space
+                    </span>
+                </div>
+                <div class="card-content" id="spaceCard">
+                    <div class="loading">Loading space data</div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-title">
+                        <span>✈️</span> Air Traffic
+                    </span>
+                    <span class="card-badge" id="openskyBadge">--</span>
+                </div>
+                <div class="card-content" id="openskyCard">
+                    <div class="loading">Loading flight data</div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-title">
+                        <span>🔥</span> Fire Detection
+                    </span>
+                </div>
+                <div class="card-content" id="firmsCard">
+                    <div class="loading">Loading fire data</div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-title">
+                        <span>📰</span> Latest News
+                    </span>
+                </div>
+                <div class="card-content" id="newsCard">
+                    <div class="loading">Loading news</div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-title">
+                        <span>💚</span> Source Health
+                    </span>
+                </div>
+                <div class="card-content" id="healthCard">
+                    <div class="loading">Loading health status</div>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <script>
+        let data = null;
+        let eventSource = null;
+        
+        function formatTime(isoString) {
+            if (!isoString) return '--';
+            const d = new Date(isoString);
+            return d.toLocaleTimeString();
+        }
+        
+        function formatChange(current, previous) {
+            if (!current || !previous) return '';
+            const change = current - previous;
+            const pct = ((change / previous) * 100).toFixed(2);
+            const sign = change >= 0 ? '+' : '';
+            const cls = change >= 0 ? 'positive' : 'negative';
+            return `<span class="metric-change ${cls}">${sign}${pct}%</span>`;
+        }
+        
+        function renderMarkets() {
+            const card = document.getElementById('marketsCard');
+            const markets = data?.markets || {};
+            const quotes = markets?.quotes || {};
+            
+            const items = [
+                { label: 'S&P 500', data: quotes['^GSPC'] },
+                { label: 'Nasdaq', data: quotes['^IXIC'] },
+                { label: 'Gold', data: quotes['GC=F'] },
+                { label: 'WTI Crude', data: quotes['CL=F'] },
+                { label: 'Bitcoin', data: quotes['BTC-USD'] },
+                { label: 'VIX', data: quotes['^VIX'] },
+            ].filter(i => i.data && !i.data.error);
+            
+            if (items.length === 0) {
+                card.innerHTML = '<div class="loading">No market data</div>';
+                return;
+            }
+            
+            card.innerHTML = items.map(item => `
+                <div class="metric">
+                    <span class="metric-label">${item.label}</span>
+                    <span>
+                        <span class="metric-value">$${item.data.price?.toLocaleString() || '--'}</span>
+                        ${item.data.change_pct ? `<span class="metric-change ${item.data.change_pct >= 0 ? 'positive' : 'negative'}">${item.data.change_pct >= 0 ? '+' : ''}${item.data.change_pct.toFixed(2)}%</span>` : ''}
+                    </span>
+                </div>
+            `).join('');
+        }
+        
+        function renderFred() {
+            const card = document.getElementById('fredCard');
+            const indicators = data?.fred || [];
+            const badge = document.getElementById('fredBadge');
+            
+            badge.textContent = `${indicators.length} indicators`;
+            
+            if (!indicators.length) {
+                card.innerHTML = '<div class="loading">No FRED data (API key may be required)</div>';
+                return;
+            }
+            
+            const items = indicators.slice(0, 6);
+            card.innerHTML = items.map(ind => `
+                <div class="metric">
+                    <span class="metric-label">${ind.label}</span>
+                    <span>
+                        <span class="metric-value">${ind.value?.toFixed(2) || '--'}</span>
+                        ${ind.date ? `<span class="metric-change">${ind.date}</span>` : ''}
+                    </span>
+                </div>
+            `).join('');
+        }
+        
+        function renderEnergy() {
+            const card = document.getElementById('energyCard');
+            const energy = data?.energy || {};
+            
+            const items = [
+                { label: 'WTI Crude', value: energy?.wti?.value || energy?.wti },
+                { label: 'Brent Crude', value: energy?.brent?.value || energy?.brent },
+            ].filter(i => i.value != null);
+            
+            if (!items.length) {
+                card.innerHTML = '<div class="loading">No energy data (API key may be required)</div>';
+                return;
+            }
+            
+            card.innerHTML = items.map(item => `
+                <div class="metric">
+                    <span class="metric-label">${item.label}</span>
+                    <span class="metric-value">$${item.value.toFixed(2)}</span>
+                </div>
+            `).join('');
+        }
+        
+        function renderSpace() {
+            const card = document.getElementById('spaceCard');
+            const space = data?.space || {};
+            const constellations = space?.constellations || {};
+            
+            card.innerHTML = `
+                <div class="metric">
+                    <span class="metric-label">ISS Inclination</span>
+                    <span class="metric-value">${space?.iss?.inclination?.toFixed(2) || '--'}°</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-label">Starlink Satellites</span>
+                    <span class="metric-value">${constellations?.starlink?.toLocaleString() || '--'}</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-label">OneWeb Satellites</span>
+                    <span class="metric-value">${constellations?.oneweb?.toLocaleString() || '--'}</span>
+                </div>
+            `;
+        }
+        
+        function renderOpenSky() {
+            const card = document.getElementById('openskyCard');
+            const badge = document.getElementById('openskyBadge');
+            const opensky = data?.opensky || {};
+            
+            badge.textContent = `${(opensky?.total_aircraft || 0).toLocaleString()} aircraft`;
+            
+            const byCountry = opensky?.by_country || {};
+            const topCountries = Object.entries(byCountry).sort((a, b) => b[1] - a[1]).slice(0, 5);
+            
+            if (!topCountries.length) {
+                card.innerHTML = '<div class="loading">No flight data</div>';
+                return;
+            }
+            
+            card.innerHTML = topCountries.map(([country, count]) => `
+                <div class="metric">
+                    <span class="metric-label">${country}</span>
+                    <span class="metric-value">${count.toLocaleString()}</span>
+                </div>
+            `).join('');
+        }
+        
+        function renderFirms() {
+            const card = document.getElementById('firmsCard');
+            const firms = data?.firms || {};
+            const hotspots = firms?.hotspots || [];
+            
+            const total = firms?.total_detections || 0;
+            
+            card.innerHTML = `
+                <div class="metric">
+                    <span class="metric-label">Total Detections</span>
+                    <span class="metric-value">${total.toLocaleString()}</span>
+                </div>
+                ${hotspots.slice(0, 5).map(h => `
+                    <div class="metric">
+                        <span class="metric-label">${h.region}</span>
+                        <span class="metric-value">${h.detections?.toLocaleString() || '--'}</span>
+                    </div>
+                `).join('')}
+            `;
+        }
+        
+        function renderNews() {
+            const card = document.getElementById('newsCard');
+            const articles = data?.news || [];
+            
+            if (!articles.length) {
+                card.innerHTML = '<div class="loading">No news articles</div>';
+                return;
+            }
+            
+            card.innerHTML = articles.slice(0, 5).map(article => `
+                <div class="news-item">
+                    <div class="news-title">${article.title || '--'}</div>
+                    <div class="news-meta">${article.source || ''} • ${article.region || 'Global'}</div>
+                </div>
+            `).join('');
+        }
+        
+        function renderHealth() {
+            const card = document.getElementById('healthCard');
+            const health = data?.health || [];
+            
+            if (!health.length) {
+                card.innerHTML = '<div class="loading">Checking sources...</div>';
+                return;
+            }
+            
+            card.innerHTML = `<div class="health-grid">${health.map(h => `
+                <div class="health-item">
+                    <span>${h.name}</span>
+                    <span class="${h.ok ? 'health-ok' : 'health-error'}">${h.ok ? '✓' : '✗'}</span>
+                </div>
+            `).join('')}</div>`;
+        }
+        
+        function renderDelta() {
+            const panel = document.getElementById('deltaPanel');
+            const delta = data?.delta;
+            
+            if (!delta || !delta.total_changes) {
+                panel.style.display = 'none';
+                return;
+            }
+            
+            panel.style.display = 'block';
+            
+            const directionMap = {
+                'risk-off': '📉 RISK-OFF',
+                'risk-on': '📈 RISK-ON',
+                'mixed': '↔️ MIXED',
+            };
+            
+            document.getElementById('deltaDirection').textContent = directionMap[delta.direction] || delta.direction;
+            document.getElementById('deltaSummary').textContent = `${delta.total_changes} changes, ${delta.critical_changes} critical`;
+            
+            const signalsHtml = (delta.signals || []).slice(0, 5).map(s => `
+                <div class="signal-item signal-${s.severity || 'moderate'}">
+                    <strong>${s.label}</strong>: ${s.from} → ${s.to}
+                    (${s.pct_change >= 0 ? '+' : ''}${s.pct_change?.toFixed(1)}%)
+                </div>
+            `).join('');
+            
+            document.getElementById('deltaSignals').innerHTML = signalsHtml;
+        }
+        
+        function renderAll() {
+            if (!data) return;
+            
+            renderMarkets();
+            renderFred();
+            renderEnergy();
+            renderSpace();
+            renderOpenSky();
+            renderFirms();
+            renderNews();
+            renderHealth();
+            renderDelta();
+            
+            const meta = data?.meta || {};
+            document.getElementById('lastUpdate').textContent = `Updated: ${formatTime(meta?.timestamp)}`;
+        }
+        
+        async function loadData() {
+            try {
+                const response = await fetch('/api/data');
+                if (response.ok) {
+                    data = await response.json();
+                    renderAll();
+                    
+                    document.getElementById('statusDot').style.background = 'var(--success)';
+                    document.getElementById('statusText').textContent = 'Live';
+                } else {
+                    throw new Error('No data yet');
+                }
+            } catch (e) {
+                document.getElementById('statusDot').style.background = 'var(--warning)';
+                document.getElementById('statusText').textContent = 'Waiting for data...';
+            }
+        }
+        
+        async function triggerSweep() {
+            const btn = document.getElementById('refreshBtn');
+            btn.disabled = true;
+            btn.textContent = 'Refreshing...';
+            
+            try {
+                await fetch('/api/sweep', { method: 'POST' });
+                setTimeout(() => {
+                    loadData();
+                    btn.disabled = false;
+                    btn.textContent = 'Refresh';
+                }, 2000);
+            } catch (e) {
+                btn.disabled = false;
+                btn.textContent = 'Refresh';
+            }
+        }
+        
+        function connectSSE() {
+            if (eventSource) {
+                eventSource.close();
+            }
+            
+            eventSource = new EventSource('/api/events');
+            
+            eventSource.onmessage = (event) => {
+                try {
+                    const msg = JSON.parse(event.data);
+                    
+                    if (msg.type === 'update' && msg.data) {
+                        data = msg.data;
+                        renderAll();
+                        
+                        document.getElementById('statusDot').style.background = 'var(--success)';
+                        document.getElementById('statusText').textContent = 'Live';
+                    }
+                } catch (e) {
+                    console.log('SSE message:', event.data);
+                }
+            };
+            
+            eventSource.onerror = () => {
+                document.getElementById('statusDot').style.background = 'var(--warning)';
+                document.getElementById('statusText').textContent = 'Reconnecting...';
+                
+                setTimeout(connectSSE, 5000);
+                eventSource.close();
+            };
+        }
+        
+        loadData();
+        connectSSE();
+        setInterval(loadData, 60000);
+    </script>
+</body>
+</html>
